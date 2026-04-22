@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fidélys — Transformez vos clients Airbnb en clients à vous</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+–noir: #0F0D0A;
+–blanc: #FAF8F4;
+–or: #B8923A;
+–or-clair: #D4B060;
+–or-pale: #F0E0B0;
+–brique: #8B3A2A;
+–gris: #6B6560;
+–gris-clair: #C8C0B8;
+–fond-clair: #F2EDE4;
+}
+
+html { scroll-behavior: smooth; }
+body {
+background: var(–blanc);
+color: var(–noir);
+font-family: ‘Outfit’, sans-serif;
+font-weight: 300;
+overflow-x: hidden;
+cursor: none;
+}
+
+.cursor {
+width: 8px; height: 8px;
+background: var(–or);
+border-radius: 50%;
+position: fixed; top: 0; left: 0;
+pointer-events: none; z-index: 9999;
+transition: transform 0.1s;
+}
+.cursor-ring {
+width: 32px; height: 32px;
+border: 1px solid var(–or);
+border-radius: 50%;
+position: fixed; top: 0; left: 0;
+pointer-events: none; z-index: 9998;
+opacity: 0.5;
+transition: transform 0.3s ease;
+}
+
+/* NAV */
+nav {
+position: fixed; top: 0; left: 0; right: 0;
+padding: 28px 64px;
+display: flex; align-items: center; justify-content: space-between;
+z-index: 100;
+background: linear-gradient(to bottom, var(–blanc) 50%, transparent);
+}
+.logo {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 26px; font-weight: 700;
+letter-spacing: 0.5px;
+color: var(–noir);
+}
+.logo span { color: var(–or); }
+.nav-right { display: flex; align-items: center; gap: 36px; }
+.nav-link {
+font-size: 12px; font-weight: 500;
+letter-spacing: 0.12em; text-transform: uppercase;
+color: var(–gris); text-decoration: none;
+transition: color 0.2s;
+}
+.nav-link:hover { color: var(–noir); }
+.nav-btn {
+background: var(–noir);
+color: var(–blanc);
+padding: 11px 26px;
+font-size: 12px; font-weight: 500;
+letter-spacing: 0.1em; text-transform: uppercase;
+text-decoration: none; border-radius: 2px;
+transition: background 0.2s;
+}
+.nav-btn:hover { background: var(–or); color: var(–noir); }
+
+/* HERO */
+.hero {
+min-height: 100vh;
+display: grid;
+grid-template-columns: 55% 45%;
+position: relative;
+}
+.hero-left {
+padding: 160px 64px 100px;
+display: flex; flex-direction: column; justify-content: center;
+}
+.pill {
+display: inline-flex; align-items: center; gap: 8px;
+background: #F0E0B020;
+border: 1px solid rgba(184,146,58,0.3);
+padding: 6px 16px; border-radius: 100px;
+font-size: 11px; font-weight: 500;
+color: var(–or); letter-spacing: 0.1em;
+text-transform: uppercase; margin-bottom: 36px;
+width: fit-content;
+}
+.pill::before { content: ‘◆’; font-size: 7px; }
+
+h1 {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: clamp(52px, 6vw, 86px);
+font-weight: 700;
+line-height: 1.03;
+letter-spacing: -1px;
+margin-bottom: 30px;
+}
+h1 em {
+font-style: italic;
+color: var(–or);
+}
+.hero-sub {
+font-size: 17px; line-height: 1.75;
+color: var(–gris); max-width: 460px;
+margin-bottom: 52px;
+}
+.hero-sub strong { color: var(–noir); font-weight: 500; }
+
+.cta-group { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+.btn-main {
+display: inline-flex; align-items: center; gap: 10px;
+background: var(–noir); color: var(–blanc);
+padding: 17px 34px; font-size: 13px; font-weight: 500;
+letter-spacing: 0.06em; text-decoration: none;
+border-radius: 2px; transition: all 0.25s;
+}
+.btn-main:hover { background: var(–or); color: var(–noir); transform: translateY(-2px); }
+.btn-main .arr { transition: transform 0.2s; }
+.btn-main:hover .arr { transform: translateX(4px); }
+.cta-note { font-size: 12px; color: var(–gris-clair); }
+
+.hero-right {
+display: flex; align-items: center; justify-content: center;
+padding: 120px 40px 80px;
+position: relative;
+}
+.hero-right::before {
+content: ‘’;
+position: absolute; inset: 0;
+background: var(–fond-clair);
+clip-path: polygon(8% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+
+/* Flyer mockup */
+.flyer-wrap {
+position: relative; z-index: 2;
+animation: gentleFloat 7s ease-in-out infinite;
+}
+@keyframes gentleFloat {
+0%,100% { transform: translateY(0) rotate(-1.5deg); }
+50% { transform: translateY(-14px) rotate(0.5deg); }
+}
+.flyer {
+width: 260px;
+background: white;
+border-radius: 10px;
+box-shadow: 0 40px 100px rgba(15,13,10,0.18), 0 8px 20px rgba(15,13,10,0.08);
+overflow: hidden;
+}
+.flyer-top {
+background: var(–noir);
+padding: 24px 22px 20px;
+text-align: center;
+}
+.flyer-brand {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 13px; font-weight: 700;
+color: rgba(250,248,244,0.5);
+letter-spacing: 0.3em; text-transform: uppercase;
+margin-bottom: 14px;
+}
+.flyer-headline {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 22px; font-weight: 700;
+color: var(–blanc); line-height: 1.25;
+margin-bottom: 6px;
+}
+.flyer-headline em { color: var(–or-clair); font-style: italic; }
+.flyer-tagline { font-size: 10px; color: rgba(250,248,244,0.4); line-height: 1.5; }
+
+.flyer-body { padding: 20px 22px; }
+.flyer-qr {
+background: var(–noir);
+border-radius: 6px;
+padding: 14px;
+display: flex; flex-direction: column; align-items: center; gap: 8px;
+margin-bottom: 14px;
+}
+.qr-img {
+display: grid; grid-template-columns: repeat(9,1fr); gap: 1.5px;
+width: 90px;
+}
+.qc { width: 8px; height: 8px; border-radius: 1px; }
+.flyer-scan-txt { font-size: 8px; color: rgba(250,248,244,0.5); letter-spacing: 0.15em; text-transform: uppercase; }
+.flyer-promo {
+background: linear-gradient(135deg, var(–or) 0%, var(–or-clair) 100%);
+border-radius: 4px; padding: 12px;
+display: flex; align-items: center; justify-content: space-between;
+}
+.flyer-promo-label { font-size: 9px; font-weight: 500; color: var(–noir); opacity: 0.7; }
+.flyer-promo-val {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 22px; font-weight: 700; color: var(–noir);
+}
+.flyer-promo-sub { font-size: 8px; color: var(–noir); opacity: 0.6; }
+
+/* Badge flottant */
+.badge-float {
+position: absolute;
+background: var(–or);
+border-radius: 8px;
+padding: 14px 18px;
+box-shadow: 0 16px 40px rgba(184,146,58,0.3);
+right: 20px; bottom: 100px;
+animation: gentleFloat2 5s ease-in-out infinite;
+}
+@keyframes gentleFloat2 {
+0%,100% { transform: translateY(0) rotate(2deg); }
+50% { transform: translateY(-8px) rotate(-1deg); }
+}
+.badge-val {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 28px; font-weight: 700; color: var(–noir);
+}
+.badge-label { font-size: 10px; color: rgba(15,13,10,0.6); font-weight: 500; }
+
+/* PROBLÈME */
+.prob-section {
+padding: 130px 64px;
+max-width: 1280px; margin: 0 auto;
+}
+.section-eyebrow {
+display: flex; align-items: center; gap: 14px;
+margin-bottom: 28px;
+}
+.eyebrow-line { width: 40px; height: 1px; background: var(–or); }
+.eyebrow-text {
+font-size: 11px; font-weight: 500;
+letter-spacing: 0.2em; text-transform: uppercase; color: var(–or);
+}
+.section-h {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: clamp(38px, 4.5vw, 64px);
+font-weight: 700; line-height: 1.08;
+letter-spacing: -0.5px;
+}
+.prob-grid {
+display: grid; grid-template-columns: 1fr 1fr;
+gap: 80px; align-items: center; margin-top: 60px;
+}
+.prob-text p {
+font-size: 16px; line-height: 1.85; color: var(–gris);
+margin-bottom: 18px;
+}
+.prob-text p strong { color: var(–noir); font-weight: 500; }
+.prob-cards { display: flex; flex-direction: column; gap: 16px; }
+.prob-card {
+border: 1px solid rgba(15,13,10,0.08);
+border-radius: 4px; padding: 28px 28px 28px 24px;
+display: flex; gap: 22px; align-items: flex-start;
+background: white; transition: all 0.25s;
+position: relative; overflow: hidden;
+}
+.prob-card::before {
+content: ‘’; position: absolute;
+left: 0; top: 0; bottom: 0; width: 3px;
+background: var(–or); transform: scaleY(0);
+transition: transform 0.25s;
+}
+.prob-card:hover::before { transform: scaleY(1); }
+.prob-card:hover { border-color: rgba(184,146,58,0.2); transform: translateX(4px); }
+.prob-icon { font-size: 26px; flex-shrink: 0; margin-top: 2px; }
+.prob-title { font-size: 15px; font-weight: 500; color: var(–noir); margin-bottom: 6px; }
+.prob-body { font-size: 13px; line-height: 1.6; color: var(–gris); }
+
+/* COMMENT ÇA MARCHE */
+.how-section {
+background: var(–noir);
+padding: 130px 64px;
+position: relative; overflow: hidden;
+}
+.how-section::after {
+content: ‘fidélys’;
+position: absolute; right: -60px; bottom: -40px;
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 220px; font-weight: 700;
+color: rgba(255,255,255,0.025);
+letter-spacing: -8px; line-height: 1;
+pointer-events: none; text-transform: lowercase;
+}
+.how-section .eyebrow-text { color: var(–or-clair); }
+.how-section .section-h { color: var(–blanc); }
+.how-steps {
+display: grid; grid-template-columns: repeat(4,1fr);
+gap: 3px; margin-top: 64px; max-width: 1200px;
+}
+.how-step {
+background: rgba(255,255,255,0.035);
+padding: 44px 32px;
+transition: background 0.3s;
+position: relative;
+}
+.how-step:hover { background: rgba(255,255,255,0.06); }
+.how-step-num {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 80px; font-weight: 700;
+color: rgba(184,146,58,0.12); line-height: 1;
+position: absolute; top: 20px; right: 24px;
+}
+.how-step-icon { font-size: 30px; margin-bottom: 20px; }
+.how-step-title {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 22px; font-weight: 700;
+color: var(–blanc); margin-bottom: 12px; line-height: 1.2;
+}
+.how-step-desc { font-size: 13px; line-height: 1.75; color: rgba(250,248,244,0.45); }
+.how-step-tag {
+display: inline-block; margin-top: 22px;
+padding: 5px 14px;
+background: rgba(184,146,58,0.12);
+color: var(–or-clair);
+font-size: 10px; font-weight: 500;
+letter-spacing: 0.12em; text-transform: uppercase;
+border-radius: 2px;
+}
+
+/* EMAILS */
+.emails-section { padding: 130px 64px; max-width: 1280px; margin: 0 auto; }
+.emails-grid {
+display: grid; grid-template-columns: 1fr 1.3fr;
+gap: 80px; margin-top: 64px; align-items: start;
+}
+.email-tabs { display: flex; flex-direction: column; gap: 12px; }
+.email-tab {
+padding: 22px 24px; border-radius: 4px; cursor: pointer;
+border: 1px solid transparent;
+transition: all 0.2s;
+display: flex; gap: 16px; align-items: flex-start;
+}
+.email-tab:hover { background: white; border-color: rgba(15,13,10,0.07); }
+.email-tab.active {
+background: white;
+border-color: rgba(184,146,58,0.25);
+box-shadow: 0 6px 24px rgba(15,13,10,0.06);
+}
+.tab-dot { width: 8px; height: 8px; border-radius: 50%; background: var(–or); flex-shrink: 0; margin-top: 6px; }
+.tab-timing { font-size: 10px; font-weight: 600; color: var(–brique); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 5px; }
+.tab-title { font-size: 15px; font-weight: 500; color: var(–noir); margin-bottom: 5px; }
+.tab-preview { font-size: 12px; color: var(–gris); line-height: 1.5; }
+
+.email-preview-card {
+background: white; border-radius: 10px;
+box-shadow: 0 24px 70px rgba(15,13,10,0.1);
+overflow: hidden; position: sticky; top: 110px;
+}
+.ep-topbar {
+background: var(–noir); padding: 14px 20px;
+display: flex; gap: 7px; align-items: center;
+}
+.ep-dot { width: 10px; height: 10px; border-radius: 50%; }
+.ep-body { padding: 32px 28px; }
+.ep-from { font-size: 11px; color: var(–gris-clair); margin-bottom: 4px; }
+.ep-subject {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 24px; font-weight: 700;
+color: var(–noir); margin-bottom: 22px; line-height: 1.2;
+}
+.ep-text { font-size: 14px; line-height: 1.85; color: #5A5550; }
+.ep-text strong { color: var(–noir); }
+.ep-cta {
+display: inline-block; margin-top: 24px;
+padding: 13px 26px;
+background: var(–noir); color: white;
+font-size: 12px; font-weight: 500;
+letter-spacing: 0.06em; border-radius: 2px;
+text-decoration: none;
+}
+
+/* PRICING */
+.pricing-section {
+background: var(–fond-clair);
+padding: 130px 64px;
+}
+.pricing-inner { max-width: 1000px; margin: 0 auto; }
+.pricing-grid {
+display: grid; grid-template-columns: 1fr 1.35fr;
+gap: 24px; margin-top: 64px;
+}
+.price-card {
+background: white; border-radius: 6px;
+padding: 48px 44px;
+border: 1px solid rgba(15,13,10,0.07);
+transition: all 0.3s;
+}
+.price-card:hover { box-shadow: 0 20px 60px rgba(15,13,10,0.07); transform: translateY(-4px); }
+.price-card.star {
+background: var(–noir);
+border-color: var(–noir);
+position: relative;
+}
+.star-badge {
+position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+background: var(–or); color: var(–noir);
+font-size: 10px; font-weight: 600;
+letter-spacing: 0.1em; text-transform: uppercase;
+padding: 5px 18px; border-radius: 2px; white-space: nowrap;
+}
+.price-label { font-size: 11px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(–gris); margin-bottom: 14px; }
+.price-card.star .price-label { color: rgba(250,248,244,0.4); }
+.price-main {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 60px; font-weight: 700; line-height: 1; color: var(–noir);
+}
+.price-card.star .price-main { color: var(–or-clair); }
+.price-plus { font-size: 14px; color: var(–gris); margin: 6px 0 32px; }
+.price-card.star .price-plus { color: rgba(250,248,244,0.4); }
+.price-list { list-style: none; display: flex; flex-direction: column; gap: 13px; margin-bottom: 38px; }
+.price-list li { display: flex; gap: 10px; font-size: 14px; color: var(–gris); align-items: flex-start; line-height: 1.5; }
+.price-card.star .price-list li { color: rgba(250,248,244,0.6); }
+.price-list li::before { content: ‘✓’; color: var(–or); font-weight: 700; flex-shrink: 0; }
+.price-btn-el {
+display: block; text-align: center;
+padding: 15px; font-size: 13px; font-weight: 500;
+letter-spacing: 0.06em; text-decoration: none;
+border-radius: 2px; transition: all 0.2s;
+background: var(–noir); color: var(–blanc);
+}
+.price-card.star .price-btn-el { background: var(–or); color: var(–noir); }
+.price-btn-el:hover { opacity: 0.85; transform: translateY(-1px); }
+.pricing-note {
+text-align: center; margin-top: 28px;
+font-size: 13px; color: var(–gris);
+font-style: italic;
+}
+
+/* FAQ */
+.faq-section { padding: 130px 64px; max-width: 860px; margin: 0 auto; }
+.faq-list { margin-top: 60px; display: flex; flex-direction: column; }
+.faq-item { border-bottom: 1px solid rgba(15,13,10,0.08); }
+.faq-q {
+width: 100%; text-align: left; background: none; border: none;
+padding: 24px 0; cursor: pointer;
+display: flex; justify-content: space-between; align-items: center;
+font-size: 16px; font-weight: 500; color: var(–noir);
+font-family: ‘Outfit’, sans-serif;
+}
+.faq-q:hover { color: var(–or); }
+.faq-icon { font-size: 20px; color: var(–or); transition: transform 0.3s; flex-shrink: 0; }
+.faq-a {
+font-size: 14px; line-height: 1.8; color: var(–gris);
+max-height: 0; overflow: hidden;
+transition: max-height 0.35s ease, padding 0.35s;
+}
+.faq-item.open .faq-a { max-height: 200px; padding-bottom: 20px; }
+.faq-item.open .faq-icon { transform: rotate(45deg); }
+
+/* CTA FINAL */
+.cta-final {
+background: var(–noir); padding: 130px 64px;
+text-align: center; position: relative; overflow: hidden;
+}
+.cta-final::before {
+content: ‘’;
+position: absolute; inset: 0;
+background: radial-gradient(ellipse at 50% 0%, rgba(184,146,58,0.07) 0%, transparent 60%);
+}
+.cta-final .eyebrow-text { color: var(–or-clair); }
+.cta-final .section-h { color: var(–blanc); margin: 16px auto 24px; max-width: 680px; }
+.cta-final-sub { font-size: 16px; color: rgba(250,248,244,0.4); margin-bottom: 48px; }
+.cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.btn-or {
+display: inline-flex; align-items: center; gap: 10px;
+background: var(–or); color: var(–noir);
+padding: 17px 38px; font-size: 13px; font-weight: 500;
+letter-spacing: 0.07em; text-decoration: none;
+border-radius: 2px; transition: all 0.25s;
+}
+.btn-or:hover { background: var(–or-clair); transform: translateY(-2px); }
+.btn-ghost {
+display: inline-flex; align-items: center;
+border: 1px solid rgba(250,248,244,0.15); color: rgba(250,248,244,0.5);
+padding: 17px 38px; font-size: 13px; font-weight: 400;
+letter-spacing: 0.06em; text-decoration: none;
+border-radius: 2px; transition: all 0.25s;
+}
+.btn-ghost:hover { border-color: var(–or); color: var(–or); }
+
+footer {
+background: #0A0806; padding: 32px 64px;
+display: flex; align-items: center; justify-content: space-between;
+}
+.f-logo {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 20px; font-weight: 700;
+color: rgba(250,248,244,0.25);
+}
+.f-logo span { color: var(–or); }
+.f-copy { font-size: 11px; color: rgba(250,248,244,0.15); }
+
+/* REVEAL */
+.rev { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.rev.in { opacity: 1; transform: none; }
+.d1 { transition-delay: 0.1s; }
+.d2 { transition-delay: 0.2s; }
+.d3 { transition-delay: 0.3s; }
+.d4 { transition-delay: 0.4s; }
+
+@media (max-width: 960px) {
+nav { padding: 20px 24px; }
+.nav-right { display: none; }
+.hero { grid-template-columns: 1fr; }
+.hero-left { padding: 120px 24px 60px; }
+.hero-right { display: none; }
+.prob-section, .emails-section, .faq-section { padding: 80px 24px; }
+.how-section, .pricing-section, .cta-final { padding: 80px 24px; }
+.prob-grid, .emails-grid, .pricing-grid { grid-template-columns: 1fr; gap: 40px; }
+.how-steps { grid-template-columns: 1fr 1fr; }
+footer { flex-direction: column; gap: 10px; text-align: center; padding: 28px 24px; }
+}
+</style>
+
+</head>
+<body>
+
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="ring"></div>
+
+<nav>
+  <div class="logo">Fidél<span>ys</span></div>
+  <div class="nav-right">
+    <a href="#comment" class="nav-link">Comment ça marche</a>
+    <a href="#tarifs" class="nav-link">Tarifs</a>
+    <a href="#faq" class="nav-link">FAQ</a>
+    <a href="mailto:matheo.boukhirane1@icloud.com" class="nav-btn">Je veux le pack →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="pill rev">Pour les hôtes Airbnb & Booking</div>
+    <h1 class="rev d1">Vos clients<br>méritent de<br><em>vous retrouver.</em></h1>
+    <p class="hero-sub rev d2">
+      Chaque client qui part, c'est un contact perdu. 
+      <strong>Fidélys vous donne les outils</strong> pour récupérer leurs coordonnées, les remercier, 
+      et les faire revenir — directement chez vous, sans commission.
+    </p>
+    <div class="cta-group rev d3">
+      <a href="mailto:matheo.boukhirane1@icloud.com" class="btn-main">Découvrir le pack <span class="arr">→</span></a>
+      <span class="cta-note">Setup en quelques jours · Sans compétences techniques</span>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="flyer-wrap rev d2">
+      <div class="flyer">
+        <div class="flyer-top">
+          <div class="flyer-brand">Fidélys</div>
+          <div class="flyer-headline">Revenez<br><em>directement</em></div>
+          <div class="flyer-tagline">Réservez sans intermédiaire<br>et profitez d'un tarif exclusif</div>
+        </div>
+        <div class="flyer-body">
+          <div class="flyer-qr">
+            <div class="qr-img" id="qrGrid"></div>
+            <div class="flyer-scan-txt">Scanner pour réserver</div>
+          </div>
+          <div class="flyer-promo">
+            <div>
+              <div class="flyer-promo-label">Votre avantage</div>
+              <div class="flyer-promo-val">−10%</div>
+              <div class="flyer-promo-sub">sur votre prochain séjour</div>
+            </div>
+            <div style="font-size:28px;">🏡</div>
+          </div>
+        </div>
+      </div>
+      <div class="badge-float">
+        <div class="badge-val">+12</div>
+        <div class="badge-label">emails ce mois</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLÈME -->
+
+<section class="prob-section">
+  <div class="section-eyebrow rev"><div class="eyebrow-line"></div><div class="eyebrow-text">Le problème</div></div>
+  <h2 class="section-h rev">Airbnb garde<br>vos clients.</h2>
+  <div class="prob-grid">
+    <div class="prob-text">
+      <p class="rev">Vous faites tout le travail : décorer le logement, répondre aux messages, accueillir avec le sourire. Mais quand le client repart, <strong>c'est Airbnb qui a son email, pas vous.</strong></p>
+      <p class="rev">S'il veut revenir chez vous, il doit repasser par la plateforme. Vous payez à nouveau. Et si vous arrêtez Airbnb un jour, vous repartez de zéro.</p>
+      <p class="rev"><strong>Ce n'est pas normal.</strong> Ce sont vos clients. Ils méritent de pouvoir vous retrouver directement.</p>
+    </div>
+    <div class="prob-cards">
+      <div class="prob-card rev">
+        <div class="prob-icon">💸</div>
+        <div>
+          <div class="prob-title">Une commission à chaque réservation</div>
+          <div class="prob-body">Même pour un client qui vous connaît déjà et qui veut revenir, la plateforme prend sa part. Encore et encore.</div>
+        </div>
+      </div>
+      <div class="prob-card rev d1">
+        <div class="prob-icon">🔒</div>
+        <div>
+          <div class="prob-title">Zéro donnée client</div>
+          <div class="prob-body">Après le départ, vous n'avez rien. Ni email, ni numéro. Impossible de recontacter votre voyageur sans passer par la plateforme.</div>
+        </div>
+      </div>
+      <div class="prob-card rev d2">
+        <div class="prob-icon">🔁</div>
+        <div>
+          <div class="prob-title">Vous dépendez d'eux</div>
+          <div class="prob-body">Si Airbnb change ses règles, augmente ses commissions ou suspend votre compte, vous avez aucun filet de sécurité.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMMENT ÇA MARCHE -->
+
+<section class="how-section" id="comment">
+  <div style="max-width:1200px;margin:0 auto;">
+    <div class="section-eyebrow rev"><div class="eyebrow-line" style="background:var(--or-clair)"></div><div class="eyebrow-text">La solution</div></div>
+    <h2 class="section-h rev">Le pack Fidélys</h2>
+    <div class="how-steps">
+      <div class="how-step rev">
+        <div class="how-step-num">01</div>
+        <div class="how-step-icon">🖨️</div>
+        <div class="how-step-title">Un flyer dans votre logement</div>
+        <div class="how-step-desc">Un beau flyer à poser sur la table de nuit ou dans le livret d'accueil. Design soigné à votre image, avec un QR code unique lié à votre propriété.</div>
+        <div class="how-step-tag">Physique</div>
+      </div>
+      <div class="how-step rev d1">
+        <div class="how-step-num">02</div>
+        <div class="how-step-icon">📱</div>
+        <div class="how-step-title">Une page dédiée à votre logement</div>
+        <div class="how-step-desc">Le client scanne, atterrit sur votre page personnalisée. Il laisse son email pour obtenir son code promo exclusif. Vous récupérez le contact.</div>
+        <div class="how-step-tag">Digital</div>
+      </div>
+      <div class="how-step rev d2">
+        <div class="how-step-num">03</div>
+        <div class="how-step-icon">📨</div>
+        <div class="how-step-title">Des emails qui travaillent pour vous</div>
+        <div class="how-step-desc">Remerciement le lendemain du départ, offre de retour une semaine après, rappel saisonnier un mois plus tard. Tout est automatique.</div>
+        <div class="how-step-tag">Automatique</div>
+      </div>
+      <div class="how-step rev d3">
+        <div class="how-step-num">04</div>
+        <div class="how-step-icon">📊</div>
+        <div class="how-step-title">Votre base clients à vous</div>
+        <div class="how-step-desc">Un tableau de bord avec tous vos contacts : qui a séjourné, quand, combien de fois. Un fichier client qui vous appartient, pour toujours.</div>
+        <div class="how-step-tag">Données</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EMAILS -->
+
+<section class="emails-section" id="emails">
+  <div class="section-eyebrow rev"><div class="eyebrow-line"></div><div class="eyebrow-text">Automatisation</div></div>
+  <h2 class="section-h rev">La séquence<br>qui fidélise.</h2>
+  <div class="emails-grid">
+    <div class="email-tabs">
+      <div class="email-tab active rev" onclick="switchEmail(0,this)">
+        <div class="tab-dot"></div>
+        <div>
+          <div class="tab-timing">J + 1 après le départ</div>
+          <div class="tab-title">Le remerciement</div>
+          <div class="tab-preview">Un message humain qui marque les esprits et demande un avis.</div>
+        </div>
+      </div>
+      <div class="email-tab rev d1" onclick="switchEmail(1,this)">
+        <div class="tab-dot"></div>
+        <div>
+          <div class="tab-timing">J + 7</div>
+          <div class="tab-title">L'offre de retour</div>
+          <div class="tab-preview">Un code promo pour réserver en direct la prochaine fois.</div>
+        </div>
+      </div>
+      <div class="email-tab rev d2" onclick="switchEmail(2,this)">
+        <div class="tab-dot"></div>
+        <div>
+          <div class="tab-timing">J + 30</div>
+          <div class="tab-title">Le rappel saisonnier</div>
+          <div class="tab-preview">Vos disponibilités à venir, en avant-première pour eux.</div>
+        </div>
+      </div>
+      <div class="email-tab rev d3" onclick="switchEmail(3,this)">
+        <div class="tab-dot"></div>
+        <div>
+          <div class="tab-timing">Au 3ème séjour</div>
+          <div class="tab-title">La récompense fidélité</div>
+          <div class="tab-preview">Une nuit offerte ou une remise spéciale. Automatiquement.</div>
+        </div>
+      </div>
+    </div>
+
+```
+<div class="email-preview-card rev d1">
+  <div class="ep-topbar">
+    <div class="ep-dot" style="background:#ff5f57"></div>
+    <div class="ep-dot" style="background:#ffbd2e"></div>
+    <div class="ep-dot" style="background:#28c840"></div>
+  </div>
+  <div class="ep-body">
+    <div class="ep-from" id="epFrom">De : Marie — Le Mas des Cigales</div>
+    <div class="ep-subject" id="epSubject">Merci pour votre séjour 🌿</div>
+    <div class="ep-text" id="epText">Bonjour Thomas,<br><br>Nous espérons que votre séjour au Mas des Cigales vous a laissé de beaux souvenirs. C'était un plaisir de vous accueillir.<br><br><strong>Un avis de votre part nous aiderait beaucoup</strong> — et nous ferait sincèrement plaisir.<br><br>Et si l'envie de revenir se fait sentir, sachez qu'on peut toujours s'arranger en direct, sans passer par les plateformes.</div>
+    <a href="#" class="ep-cta" id="epCta">Laisser un avis →</a>
+  </div>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- PRICING -->
+
+<section class="pricing-section" id="tarifs">
+  <div class="pricing-inner">
+    <div class="section-eyebrow rev"><div class="eyebrow-line"></div><div class="eyebrow-text">Tarifs</div></div>
+    <h2 class="section-h rev">Clair. Sans surprise.</h2>
+    <div class="pricing-grid">
+      <div class="price-card rev">
+        <div class="price-label">Essentiel</div>
+        <div class="price-main">199€</div>
+        <div class="price-plus">une fois · tout inclus</div>
+        <ul class="price-list">
+          <li>Design flyer personnalisé (fichier print)</li>
+          <li>QR code unique par logement</li>
+          <li>Page de capture email dédiée</li>
+          <li>3 emails automatiques configurés</li>
+          <li>Hébergement 1 an inclus</li>
+        </ul>
+        <a href="mailto:matheo.boukhirane1@icloud.com" class="price-btn-el">Commencer →</a>
+      </div>
+      <div class="price-card star rev d1">
+        <div class="star-badge">⭐ Recommandé</div>
+        <div class="price-label">Pro</div>
+        <div class="price-main">199€</div>
+        <div class="price-plus">setup + 29€/mois</div>
+        <ul class="price-list">
+          <li>Tout le pack Essentiel</li>
+          <li>Dashboard clients en temps réel</li>
+          <li>Emails illimités & personnalisables</li>
+          <li>SMS automatiques après chaque séjour</li>
+          <li>Système de fidélité automatisé</li>
+          <li>Rapport mensuel de performance</li>
+          <li>Support 7j/7</li>
+        </ul>
+        <a href="mailto:matheo.boukhirane1@icloud.com" class="price-btn-el">Je veux le Pro →</a>
+      </div>
+    </div>
+    <p class="pricing-note rev">Un seul client qui revient en direct rembourse l'investissement. La commission économisée fait le reste.</p>
+  </div>
+</section>
+
+<!-- FAQ -->
+
+<section class="faq-section" id="faq">
+  <div class="section-eyebrow rev"><div class="eyebrow-line"></div><div class="eyebrow-text">Questions fréquentes</div></div>
+  <h2 class="section-h rev">Vous avez des doutes ?<br>C'est normal.</h2>
+  <div class="faq-list rev d1">
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Est-ce que c'est autorisé par Airbnb ? <span class="faq-icon">+</span></button>
+      <div class="faq-a">Fidélys ne vous demande pas de contourner les CGU d'Airbnb pendant un séjour en cours. Le flyer invite simplement le client à revenir en direct pour une prochaine fois — ce qui est tout à fait légal.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Je suis nul en tech, ça marche quand même ? <span class="faq-icon">+</span></button>
+      <div class="faq-a">Oui. On s'occupe de tout le setup pour vous : création de la page, configuration des emails, QR code. Vous n'avez rien à installer ni à coder. Vous recevez juste un fichier PDF à imprimer.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Combien de temps avant d'avoir mes premiers contacts ? <span class="faq-icon">+</span></button>
+      <div class="faq-a">Ça dépend de votre taux d'occupation. Dès que le premier client scanne le QR code, vous avez un contact. Sur un logement bien occupé, les premiers résultats arrivent en quelques semaines.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Et si j'ai plusieurs logements ? <span class="faq-icon">+</span></button>
+      <div class="faq-a">On peut créer un QR code et une page dédiée par logement. Contactez-nous pour un tarif adapté à votre situation.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Puis-je arrêter l'abonnement à tout moment ? <span class="faq-icon">+</span></button>
+      <div class="faq-a">Oui, sans engagement. Si vous arrêtez le Pro, vous gardez votre base client et vos contacts. Vous perdez seulement les emails automatiques et le dashboard.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+
+<section class="cta-final" id="contact">
+  <div style="position:relative;z-index:1;">
+    <div class="section-eyebrow rev" style="justify-content:center;"><div class="eyebrow-line" style="background:var(--or-clair)"></div><div class="eyebrow-text">Prêt ?</div><div class="eyebrow-line" style="background:var(--or-clair)"></div></div>
+    <h2 class="section-h rev">Vos clients méritent<br>de vous retrouver.</h2>
+    <p class="cta-final-sub rev">On s'occupe de tout. Vous posez le flyer, le reste est automatique.</p>
+    <div class="cta-btns rev">
+      <a href="mailto:matheo.boukhirane1@icloud.com" class="btn-or">Démarrer maintenant →</a>
+      <a href="tel:+33781923879" class="btn-ghost">Appeler Matheo</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="f-logo">Fidél<span>ys</span></div>
+  <div class="f-copy">© 2025 Fidélys — Tous droits réservés</div>
+</footer>
+
+<script>
+// Cursor
+const cur = document.getElementById('cur');
+const ring = document.getElementById('ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+(function tick(){
+  cur.style.transform=`translate(${mx-4}px,${my-4}px)`;
+  rx+=(mx-rx)*0.1;ry+=(my-ry)*0.1;
+  ring.style.transform=`translate(${rx-16}px,${ry-16}px)`;
+  requestAnimationFrame(tick);
+})();
+
+// QR code
+const qrGrid=document.getElementById('qrGrid');
+const pat=[1,1,1,0,1,1,1,1,0,0,0,0,0,1,1,0,1,0,1,0,1,1,0,0,0,0,0,1,1,1,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,1,0,1,0,1,0,0,0,1,0,0,1,0,1,1,0,1,1,0,1,1,1,0,1,1,1,1,0,0,0,0,0,1,1,0,1,0,1,0,1];
+pat.forEach(v=>{const c=document.createElement('div');c.className='qc';c.style.background=v?'white':'transparent';qrGrid.appendChild(c);});
+
+// Scroll reveal
+const revs=document.querySelectorAll('.rev');
+new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');}),{threshold:0.1}).observe||0;
+const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');}),{threshold:0.08});
+revs.forEach(r=>obs.observe(r));
+
+// Email switcher
+const emails=[
+  {from:'De : Marie — Le Mas des Cigales',subject:'Merci pour votre séjour 🌿',text:'Bonjour Thomas,<br><br>Nous espérons que votre séjour au Mas des Cigales vous a laissé de beaux souvenirs. C\'était un plaisir de vous accueillir.<br><br><strong>Un avis de votre part nous aiderait beaucoup</strong> — et nous ferait sincèrement plaisir.<br><br>Et si l\'envie de revenir se fait sentir, sachez qu\'on peut toujours s\'arranger en direct, sans passer par les plateformes.',cta:'Laisser un avis →'},
+  {from:'De : Marie — Le Mas des Cigales',subject:'Un cadeau rien que pour vous 🎁',text:'Bonjour Thomas,<br><br>Il y a une semaine vous quittiez le Mas des Cigales... on espère que vous en gardez un beau souvenir.<br><br>Pour vous remercier, voici votre <strong>code exclusif : THOMAS10</strong> — valable sur votre prochaine réservation en direct.<br><br>Pas de frais de plateforme, juste vous et nous.',cta:'Réserver en direct →'},
+  {from:'De : Marie — Le Mas des Cigales',subject:'L\'été approche — vos dates en avant-première ☀️',text:'Bonjour Thomas,<br><br>La belle saison arrive, et on a pensé à vous avant tout le monde.<br><br>Voici <strong>nos disponibilités de juillet et août</strong>, en exclusivité pour nos clients fidèles. Ces dates partent vite — n\'attendez pas trop.<br><br>Réservez directement et économisez les frais de plateforme.',cta:'Voir les disponibilités →'},
+  {from:'De : Marie — Le Mas des Cigales',subject:'🏅 Vous êtes un client VIP',text:'Bonjour Thomas,<br><br>C\'est votre <strong>3ème séjour</strong> au Mas des Cigales — et ça compte vraiment pour nous.<br><br>En guise de remerciement, votre prochain séjour bénéficie d\'une <strong>nuit offerte</strong> ou d\'une remise de 15%, au choix.<br><br>Merci de nous faire confiance. C\'est exactement pour ça qu\'on fait ce métier.',cta:'Réclamer mon avantage →'}
+];
+function switchEmail(i,el){
+  document.querySelectorAll('.email-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  const e=emails[i];
+  document.getElementById('epFrom').textContent=e.from;
+  document.getElementById('epSubject').textContent=e.subject;
+  document.getElementById('epText').innerHTML=e.text;
+  document.getElementById('epCta').textContent=e.cta;
+}
+
+// FAQ
+function toggleFaq(btn){
+  const item=btn.parentElement;
+  const isOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+  if(!isOpen)item.classList.add('open');
+}
+</script>
+
+</body>
+</html>
