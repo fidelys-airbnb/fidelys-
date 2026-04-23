@@ -89,14 +89,24 @@ min-height: 100vh;
 display: grid;
 grid-template-columns: 55% 45%;
 position: relative;
+background: linear-gradient(135deg, #FAF8F4 0%, #F5EFE3 60%, #EDE3D0 100%);
+}
+.hero::before {
+content: ‘’;
+position: absolute;
+top: 0; right: 0; bottom: 0; left: 0;
+background: radial-gradient(ellipse at 80% 20%, rgba(184,146,58,0.08) 0%, transparent 60%),
+radial-gradient(ellipse at 20% 80%, rgba(139,58,42,0.05) 0%, transparent 50%);
+pointer-events: none;
 }
 .hero-left {
 padding: 160px 64px 100px;
 display: flex; flex-direction: column; justify-content: center;
+position: relative; z-index: 1;
 }
 .pill {
 display: inline-flex; align-items: center; gap: 8px;
-background: #F0E0B020;
+background: rgba(184,146,58,0.1);
 border: 1px solid rgba(184,146,58,0.3);
 padding: 6px 16px; border-radius: 100px;
 font-size: 11px; font-weight: 500;
@@ -114,10 +124,7 @@ line-height: 1.03;
 letter-spacing: -1px;
 margin-bottom: 30px;
 }
-h1 em {
-font-style: italic;
-color: var(–or);
-}
+h1 em { font-style: italic; color: var(–or); }
 .hero-sub {
 font-size: 17px; line-height: 1.75;
 color: var(–gris); max-width: 460px;
@@ -141,7 +148,7 @@ border-radius: 2px; transition: all 0.25s;
 .hero-right {
 display: flex; align-items: center; justify-content: center;
 padding: 120px 40px 80px;
-position: relative;
+position: relative; z-index: 1;
 }
 .hero-right::before {
 content: ‘’;
@@ -213,7 +220,6 @@ font-size: 22px; font-weight: 700; color: var(–noir);
 }
 .flyer-promo-sub { font-size: 8px; color: var(–noir); opacity: 0.6; }
 
-/* Badge flottant */
 .badge-float {
 position: absolute;
 background: var(–or);
@@ -237,6 +243,7 @@ font-size: 28px; font-weight: 700; color: var(–noir);
 .prob-section {
 padding: 130px 64px;
 max-width: 1280px; margin: 0 auto;
+background: transparent;
 }
 .section-eyebrow {
 display: flex; align-items: center; gap: 14px;
@@ -288,6 +295,12 @@ background: var(–noir);
 padding: 130px 64px;
 position: relative; overflow: hidden;
 }
+.how-section::before {
+content: ‘’;
+position: absolute; inset: 0;
+background: radial-gradient(ellipse at 30% 50%, rgba(184,146,58,0.06) 0%, transparent 60%),
+radial-gradient(ellipse at 80% 80%, rgba(184,146,58,0.04) 0%, transparent 40%);
+}
 .how-section::after {
 content: ‘fidélys’;
 position: absolute; right: -60px; bottom: -40px;
@@ -334,7 +347,10 @@ border-radius: 2px;
 }
 
 /* EMAILS */
-.emails-section { padding: 130px 64px; max-width: 1280px; margin: 0 auto; }
+.emails-section {
+padding: 130px 64px; max-width: 1280px; margin: 0 auto;
+background: transparent;
+}
 .emails-grid {
 display: grid; grid-template-columns: 1fr 1.3fr;
 gap: 80px; margin-top: 64px; align-items: start;
@@ -385,62 +401,150 @@ letter-spacing: 0.06em; border-radius: 2px;
 text-decoration: none;
 }
 
-/* PRICING */
+/* ===================== PRICING ===================== */
 .pricing-section {
-background: var(–fond-clair);
+position: relative;
 padding: 130px 64px;
+overflow: hidden;
 }
-.pricing-inner { max-width: 1000px; margin: 0 auto; }
+
+/* Fond dégradé chaud et riche */
+.pricing-section::before {
+content: ‘’;
+position: absolute; inset: 0;
+background:
+linear-gradient(160deg, #1A1208 0%, #2A1E0A 30%, #1E160A 60%, #120D06 100%);
+z-index: 0;
+}
+/* Halos lumineux dorés */
+.pricing-section::after {
+content: ‘’;
+position: absolute; inset: 0;
+background:
+radial-gradient(ellipse at 20% 50%, rgba(184,146,58,0.18) 0%, transparent 50%),
+radial-gradient(ellipse at 80% 30%, rgba(212,176,96,0.12) 0%, transparent 45%),
+radial-gradient(ellipse at 50% 100%, rgba(139,58,42,0.1) 0%, transparent 40%);
+z-index: 0;
+}
+
+.pricing-inner {
+max-width: 1000px; margin: 0 auto;
+position: relative; z-index: 1;
+}
+
+/* Titres blancs sur fond sombre */
+.pricing-section .eyebrow-text { color: var(–or-clair); }
+.pricing-section .section-h { color: var(–blanc); }
+
 .pricing-grid {
 display: grid; grid-template-columns: 1fr 1.35fr;
-gap: 24px; margin-top: 64px;
+gap: 28px; margin-top: 64px;
 }
+
 .price-card {
-background: white; border-radius: 6px;
-padding: 48px 44px;
-border: 1px solid rgba(15,13,10,0.07);
+background: rgba(255,255,255,0.06);
+backdrop-filter: blur(12px);
+border-radius: 12px;
+padding: 52px 48px;
+border: 1px solid rgba(255,255,255,0.1);
 transition: all 0.3s;
-}
-.price-card:hover { box-shadow: 0 20px 60px rgba(15,13,10,0.07); transform: translateY(-4px); }
-.price-card.star {
-background: var(–noir);
-border-color: var(–noir);
 position: relative;
 }
-.star-badge {
-position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
-background: var(–or); color: var(–noir);
-font-size: 10px; font-weight: 600;
-letter-spacing: 0.1em; text-transform: uppercase;
-padding: 5px 18px; border-radius: 2px; white-space: nowrap;
+.price-card:hover {
+background: rgba(255,255,255,0.09);
+border-color: rgba(184,146,58,0.35);
+transform: translateY(-6px);
+box-shadow: 0 32px 80px rgba(0,0,0,0.4);
 }
-.price-label { font-size: 11px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(–gris); margin-bottom: 14px; }
-.price-card.star .price-label { color: rgba(250,248,244,0.4); }
+
+.price-card.star {
+background: linear-gradient(145deg, rgba(184,146,58,0.2) 0%, rgba(212,176,96,0.08) 100%);
+border: 1px solid rgba(184,146,58,0.5);
+box-shadow: 0 0 60px rgba(184,146,58,0.12), inset 0 1px 0 rgba(255,255,255,0.1);
+}
+.price-card.star:hover {
+background: linear-gradient(145deg, rgba(184,146,58,0.28) 0%, rgba(212,176,96,0.12) 100%);
+border-color: rgba(184,146,58,0.8);
+box-shadow: 0 0 80px rgba(184,146,58,0.2), 0 32px 80px rgba(0,0,0,0.4);
+}
+
+.star-badge {
+position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+background: linear-gradient(90deg, var(–or), var(–or-clair));
+color: var(–noir);
+font-size: 10px; font-weight: 700;
+letter-spacing: 0.12em; text-transform: uppercase;
+padding: 6px 22px; border-radius: 100px; white-space: nowrap;
+box-shadow: 0 4px 20px rgba(184,146,58,0.4);
+}
+
+.price-label {
+font-size: 11px; font-weight: 500;
+letter-spacing: 0.15em; text-transform: uppercase;
+color: rgba(250,248,244,0.4); margin-bottom: 14px;
+}
+
 .price-main {
 font-family: ‘Cormorant Garamond’, serif;
-font-size: 60px; font-weight: 700; line-height: 1; color: var(–noir);
+font-size: 72px; font-weight: 700; line-height: 1;
+color: var(–blanc);
 }
-.price-card.star .price-main { color: var(–or-clair); }
-.price-plus { font-size: 14px; color: var(–gris); margin: 6px 0 32px; }
-.price-card.star .price-plus { color: rgba(250,248,244,0.4); }
-.price-list { list-style: none; display: flex; flex-direction: column; gap: 13px; margin-bottom: 38px; }
-.price-list li { display: flex; gap: 10px; font-size: 14px; color: var(–gris); align-items: flex-start; line-height: 1.5; }
-.price-card.star .price-list li { color: rgba(250,248,244,0.6); }
-.price-list li::before { content: ‘✓’; color: var(–or); font-weight: 700; flex-shrink: 0; }
+.price-card.star .price-main {
+color: var(–or-clair);
+text-shadow: 0 0 40px rgba(184,146,58,0.3);
+}
+
+.price-plus {
+font-size: 14px; color: rgba(250,248,244,0.35);
+margin: 8px 0 36px;
+}
+
+.price-list {
+list-style: none; display: flex; flex-direction: column;
+gap: 14px; margin-bottom: 44px;
+}
+.price-list li {
+display: flex; gap: 12px; font-size: 14px;
+color: rgba(250,248,244,0.6); align-items: flex-start; line-height: 1.5;
+}
+.price-list li::before {
+content: ‘✓’; color: var(–or); font-weight: 700;
+flex-shrink: 0;
+}
+.price-card.star .price-list li { color: rgba(250,248,244,0.75); }
+
 .price-btn-el {
 display: block; text-align: center;
-padding: 15px; font-size: 13px; font-weight: 500;
-letter-spacing: 0.06em; text-decoration: none;
-border-radius: 2px; transition: all 0.2s;
-background: var(–noir); color: var(–blanc);
+padding: 17px; font-size: 13px; font-weight: 500;
+letter-spacing: 0.08em; text-decoration: none;
+border-radius: 4px; transition: all 0.25s;
+background: rgba(255,255,255,0.1);
+border: 1px solid rgba(255,255,255,0.15);
+color: var(–blanc);
 }
-.price-card.star .price-btn-el { background: var(–or); color: var(–noir); }
-.price-btn-el:hover { opacity: 0.85; transform: translateY(-1px); }
+.price-card.star .price-btn-el {
+background: linear-gradient(135deg, var(–or) 0%, var(–or-clair) 100%);
+border-color: transparent;
+color: var(–noir);
+font-weight: 600;
+box-shadow: 0 8px 30px rgba(184,146,58,0.35);
+}
+.price-btn-el:hover {
+background: rgba(255,255,255,0.18);
+transform: translateY(-2px);
+}
+.price-card.star .price-btn-el:hover {
+background: linear-gradient(135deg, var(–or-clair) 0%, #E8C870 100%);
+box-shadow: 0 12px 40px rgba(184,146,58,0.5);
+transform: translateY(-2px);
+}
+
 .pricing-note {
-text-align: center; margin-top: 28px;
-font-size: 13px; color: var(–gris);
+text-align: center; margin-top: 36px;
+font-size: 14px; color: rgba(250,248,244,0.3);
 font-style: italic;
 }
+/* ===================== END PRICING ===================== */
 
 /* FAQ */
 .faq-section { padding: 130px 64px; max-width: 860px; margin: 0 auto; }
@@ -465,32 +569,55 @@ transition: max-height 0.35s ease, padding 0.35s;
 
 /* CTA FINAL */
 .cta-final {
-background: var(–noir); padding: 130px 64px;
-text-align: center; position: relative; overflow: hidden;
+position: relative; padding: 160px 64px;
+text-align: center; overflow: hidden;
 }
 .cta-final::before {
 content: ‘’;
 position: absolute; inset: 0;
-background: radial-gradient(ellipse at 50% 0%, rgba(184,146,58,0.07) 0%, transparent 60%);
+background:
+linear-gradient(180deg, #0F0D0A 0%, #1A1208 50%, #0F0D0A 100%);
+z-index: 0;
 }
+.cta-final::after {
+content: ‘’;
+position: absolute; inset: 0;
+background:
+radial-gradient(ellipse at 50% 30%, rgba(184,146,58,0.12) 0%, transparent 55%),
+radial-gradient(ellipse at 20% 80%, rgba(184,146,58,0.06) 0%, transparent 40%),
+radial-gradient(ellipse at 80% 80%, rgba(139,58,42,0.07) 0%, transparent 40%);
+z-index: 0;
+}
+.cta-final > div { position: relative; z-index: 1; }
 .cta-final .eyebrow-text { color: var(–or-clair); }
 .cta-final .section-h { color: var(–blanc); margin: 16px auto 24px; max-width: 680px; }
-.cta-final-sub { font-size: 16px; color: rgba(250,248,244,0.4); margin-bottom: 48px; }
-.cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.cta-final-sub { font-size: 16px; color: rgba(250,248,244,0.4); margin-bottom: 56px; }
+
+.cta-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+/* Bouton principal GRAND */
 .btn-or {
-display: inline-flex; align-items: center; gap: 10px;
-background: var(–or); color: var(–noir);
-padding: 17px 38px; font-size: 13px; font-weight: 500;
-letter-spacing: 0.07em; text-decoration: none;
-border-radius: 2px; transition: all 0.25s;
+display: inline-flex; align-items: center; gap: 12px;
+background: linear-gradient(135deg, var(–or) 0%, var(–or-clair) 100%);
+color: var(–noir);
+padding: 22px 52px;
+font-size: 16px; font-weight: 600;
+letter-spacing: 0.06em; text-decoration: none;
+border-radius: 4px; transition: all 0.3s;
+box-shadow: 0 8px 40px rgba(184,146,58,0.35);
 }
-.btn-or:hover { background: var(–or-clair); transform: translateY(-2px); }
+.btn-or:hover {
+background: linear-gradient(135deg, var(–or-clair) 0%, #E8C870 100%);
+transform: translateY(-3px);
+box-shadow: 0 16px 60px rgba(184,146,58,0.5);
+}
+
 .btn-ghost {
 display: inline-flex; align-items: center;
 border: 1px solid rgba(250,248,244,0.15); color: rgba(250,248,244,0.5);
-padding: 17px 38px; font-size: 13px; font-weight: 400;
+padding: 22px 44px; font-size: 15px; font-weight: 400;
 letter-spacing: 0.06em; text-decoration: none;
-border-radius: 2px; transition: all 0.25s;
+border-radius: 4px; transition: all 0.25s;
 }
 .btn-ghost:hover { border-color: var(–or); color: var(–or); }
 
@@ -525,6 +652,8 @@ nav { padding: 20px 24px; }
 .prob-grid, .emails-grid, .pricing-grid { grid-template-columns: 1fr; gap: 40px; }
 .how-steps { grid-template-columns: 1fr 1fr; }
 footer { flex-direction: column; gap: 10px; text-align: center; padding: 28px 24px; }
+.price-card { padding: 36px 28px; }
+.btn-or { padding: 18px 36px; font-size: 15px; }
 }
 </style>
 
@@ -551,8 +680,8 @@ footer { flex-direction: column; gap: 10px; text-align: center; padding: 28px 24
     <div class="pill rev">Pour les hôtes Airbnb & Booking</div>
     <h1 class="rev d1">Vos clients<br>méritent de<br><em>vous retrouver.</em></h1>
     <p class="hero-sub rev d2">
-      Chaque client qui part, c'est un contact perdu. 
-      <strong>Fidélys vous donne les outils</strong> pour récupérer leurs coordonnées, les remercier, 
+      Chaque client qui part, c'est un contact perdu.
+      <strong>Fidélys vous donne les outils</strong> pour récupérer leurs coordonnées, les remercier,
       et les faire revenir — directement chez vous, sans commission.
     </p>
     <div class="cta-group rev d3">
@@ -631,7 +760,7 @@ footer { flex-direction: column; gap: 10px; text-align: center; padding: 28px 24
 <!-- COMMENT ÇA MARCHE -->
 
 <section class="how-section" id="comment">
-  <div style="max-width:1200px;margin:0 auto;">
+  <div style="max-width:1200px;margin:0 auto;position:relative;z-index:1;">
     <div class="section-eyebrow rev"><div class="eyebrow-line" style="background:var(--or-clair)"></div><div class="eyebrow-text">La solution</div></div>
     <h2 class="section-h rev">Le pack Fidélys</h2>
     <div class="how-steps">
@@ -707,23 +836,19 @@ footer { flex-direction: column; gap: 10px; text-align: center; padding: 28px 24
         </div>
       </div>
     </div>
-
-```
-<div class="email-preview-card rev d1">
-  <div class="ep-topbar">
-    <div class="ep-dot" style="background:#ff5f57"></div>
-    <div class="ep-dot" style="background:#ffbd2e"></div>
-    <div class="ep-dot" style="background:#28c840"></div>
-  </div>
-  <div class="ep-body">
-    <div class="ep-from" id="epFrom">De : Marie — Le Mas des Cigales</div>
-    <div class="ep-subject" id="epSubject">Merci pour votre séjour 🌿</div>
-    <div class="ep-text" id="epText">Bonjour Thomas,<br><br>Nous espérons que votre séjour au Mas des Cigales vous a laissé de beaux souvenirs. C'était un plaisir de vous accueillir.<br><br><strong>Un avis de votre part nous aiderait beaucoup</strong> — et nous ferait sincèrement plaisir.<br><br>Et si l'envie de revenir se fait sentir, sachez qu'on peut toujours s'arranger en direct, sans passer par les plateformes.</div>
-    <a href="#" class="ep-cta" id="epCta">Laisser un avis →</a>
-  </div>
-</div>
-```
-
+    <div class="email-preview-card rev d1">
+      <div class="ep-topbar">
+        <div class="ep-dot" style="background:#ff5f57"></div>
+        <div class="ep-dot" style="background:#ffbd2e"></div>
+        <div class="ep-dot" style="background:#28c840"></div>
+      </div>
+      <div class="ep-body">
+        <div class="ep-from" id="epFrom">De : Marie — Le Mas des Cigales</div>
+        <div class="ep-subject" id="epSubject">Merci pour votre séjour 🌿</div>
+        <div class="ep-text" id="epText">Bonjour Thomas,<br><br>Nous espérons que votre séjour au Mas des Cigales vous a laissé de beaux souvenirs. C'était un plaisir de vous accueillir.<br><br><strong>Un avis de votre part nous aiderait beaucoup</strong> — et nous ferait sincèrement plaisir.<br><br>Et si l'envie de revenir se fait sentir, sachez qu'on peut toujours s'arranger en direct, sans passer par les plateformes.</div>
+        <a href="#" class="ep-cta" id="epCta">Laisser un avis →</a>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -731,9 +856,10 @@ footer { flex-direction: column; gap: 10px; text-align: center; padding: 28px 24
 
 <section class="pricing-section" id="tarifs">
   <div class="pricing-inner">
-    <div class="section-eyebrow rev"><div class="eyebrow-line"></div><div class="eyebrow-text">Tarifs</div></div>
+    <div class="section-eyebrow rev"><div class="eyebrow-line" style="background:var(--or-clair)"></div><div class="eyebrow-text">Tarifs</div></div>
     <h2 class="section-h rev">Clair. Sans surprise.</h2>
     <div class="pricing-grid">
+      <!-- Essentiel -->
       <div class="price-card rev">
         <div class="price-label">Essentiel</div>
         <div class="price-main">199€</div>
@@ -747,6 +873,7 @@ footer { flex-direction: column; gap: 10px; text-align: center; padding: 28px 24
         </ul>
         <a href="mailto:matheo.boukhirane1@icloud.com" class="price-btn-el">Commencer →</a>
       </div>
+      <!-- Pro -->
       <div class="price-card star rev d1">
         <div class="star-badge">⭐ Recommandé</div>
         <div class="price-label">Pro</div>
@@ -800,8 +927,12 @@ footer { flex-direction: column; gap: 10px; text-align: center; padding: 28px 24
 <!-- CTA FINAL -->
 
 <section class="cta-final" id="contact">
-  <div style="position:relative;z-index:1;">
-    <div class="section-eyebrow rev" style="justify-content:center;"><div class="eyebrow-line" style="background:var(--or-clair)"></div><div class="eyebrow-text">Prêt ?</div><div class="eyebrow-line" style="background:var(--or-clair)"></div></div>
+  <div>
+    <div class="section-eyebrow rev" style="justify-content:center;">
+      <div class="eyebrow-line" style="background:var(--or-clair)"></div>
+      <div class="eyebrow-text">Prêt ?</div>
+      <div class="eyebrow-line" style="background:var(--or-clair)"></div>
+    </div>
     <h2 class="section-h rev">Vos clients méritent<br>de vous retrouver.</h2>
     <p class="cta-final-sub rev">On s'occupe de tout. Vous posez le flyer, le reste est automatique.</p>
     <div class="cta-btns rev">
@@ -835,10 +966,8 @@ const pat=[1,1,1,0,1,1,1,1,0,0,0,0,0,1,1,0,1,0,1,0,1,1,0,0,0,0,0,1,1,1,1,0,1,1,1
 pat.forEach(v=>{const c=document.createElement('div');c.className='qc';c.style.background=v?'white':'transparent';qrGrid.appendChild(c);});
 
 // Scroll reveal
-const revs=document.querySelectorAll('.rev');
-new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');}),{threshold:0.1}).observe||0;
 const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');}),{threshold:0.08});
-revs.forEach(r=>obs.observe(r));
+document.querySelectorAll('.rev').forEach(r=>obs.observe(r));
 
 // Email switcher
 const emails=[
